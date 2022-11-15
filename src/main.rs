@@ -1,7 +1,6 @@
 use tetra::graphics::{self, Color, Rectangle, Texture};
 use tetra::input::{self, Key};
 use tetra::math::Vec2;
-use tetra::window;
 use tetra::{Context, ContextBuilder, State};
 
 const WINDOW_WIDTH: f32 = 640.0;
@@ -58,17 +57,7 @@ impl Entity {
 }
 
 impl State for GameState {
-    fn draw(&mut self, ctx: &mut tetra::Context) -> tetra::Result {
-        graphics::clear(ctx, Color::rgb(0.392, 0.583, 0.929));
-
-        self.player1.texture.draw(ctx, self.player1.position);
-        self.player2.texture.draw(ctx, self.player2.position);
-        self.ball.texture.draw(ctx, self.ball.position);
-
-        Ok(())
-    }
-
-    fn update(&mut self, ctx: &mut tetra::Context) -> tetra::Result {
+    fn update(&mut self, ctx: &mut Context) -> tetra::Result {
 
         let player1_bounds = self.player1.bounds();
         let player2_bounds = self.player2.bounds();
@@ -120,21 +109,31 @@ impl State for GameState {
         }
 
         if self.ball.position.x < 0.0{
-            window::quit(ctx);
+            //window::quit(ctx);
             println!("Player 2 wins!");
         }
 
         if self.ball.position.x > WINDOW_WIDTH {
-            window::quit(ctx);
+            //window::quit(ctx);
             println!("Player 1 wins!");
         }
+
+        Ok(())
+    }
+
+    fn draw(&mut self, ctx: &mut Context) -> tetra::Result {
+        graphics::clear(ctx, Color::rgb(0.392, 0.583, 0.929));
+
+        self.player1.texture.draw(ctx, self.player1.position);
+        self.player2.texture.draw(ctx, self.player2.position);
+        self.ball.texture.draw(ctx, self.ball.position);
 
         Ok(())
     }
 }
 
 impl GameState {
-    fn new(ctx: &mut tetra::Context) -> tetra::Result<GameState> {
+    fn new(ctx: &mut Context) -> tetra::Result<GameState> {
         let player1_texture = Texture::new(ctx, "./resources/player1.png")?;
         let player1_position = Vec2::new(
             16.0,
