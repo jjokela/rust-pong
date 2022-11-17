@@ -61,6 +61,7 @@ impl State for GameState {
 
         let player1_bounds = self.player1.bounds();
         let player2_bounds = self.player2.bounds();
+        let ball_bounds = self.ball.bounds();
 
         if input::is_key_down(ctx, Key::W) && player1_bounds.top() > 0.0 {
             self.player1.position.y -= PADDLE_SPEED;
@@ -110,12 +111,42 @@ impl State for GameState {
 
         if self.ball.position.x < 0.0{
             //window::quit(ctx);
-            println!("Player 2 wins!");
+            //println!("Player 2 wins!");
+            self.ball.velocity = Vec2::new(-BALL_SPEED, 0.0);
+            self.ball.position = Vec2::new(
+                WINDOW_WIDTH / 2.0 - ball_bounds.width as f32 / 2.0,
+                WINDOW_HEIGHT / 2.0 - ball_bounds.height as f32 / 2.0,
+            );
+
+            self.player1.position = Vec2::new(
+                16.0,
+                (WINDOW_HEIGHT - player1_bounds.height as f32) / 2.0,
+            );
+
+            self.player2.position = Vec2::new(
+                WINDOW_WIDTH - player2_bounds.width as f32 - 16.0,
+                (WINDOW_HEIGHT - player2_bounds.height as f32) / 2.0,
+            );
         }
 
         if self.ball.position.x > WINDOW_WIDTH {
             //window::quit(ctx);
-            println!("Player 1 wins!");
+            //println!("Player 1 wins!");
+            self.ball.velocity = Vec2::new(-BALL_SPEED, 0.0);
+            self.ball.position = Vec2::new(
+                WINDOW_WIDTH / 2.0 - ball_bounds.width as f32 / 2.0,
+                WINDOW_HEIGHT / 2.0 - ball_bounds.height as f32 / 2.0,
+            );
+
+            self.player1.position = Vec2::new(
+                16.0,
+                (WINDOW_HEIGHT - player1_bounds.height as f32) / 2.0,
+            );
+
+            self.player2.position = Vec2::new(
+                WINDOW_WIDTH - player2_bounds.width as f32 - 16.0,
+                (WINDOW_HEIGHT - player2_bounds.height as f32) / 2.0,
+            );
         }
 
         Ok(())
